@@ -1,0 +1,11 @@
+*.swp
+*.out
+*.swo
+*.log
+*.pyc
+*~
+log/
+trash
+*.bak
+*_test
+tags
