@@ -19,6 +19,9 @@ test-class-2:
 test-type-1:
 	g++ $@.cpp $(FLAG) -o $@.out
 
+smart-pointer:
+	g++ $@-test.cpp $(FLAG) -o $@.out
+
 clean:
 	rm *.out
 
