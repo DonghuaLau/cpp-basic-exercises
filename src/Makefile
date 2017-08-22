@@ -1,5 +1,6 @@
 
-FLAG=-D SRC_MAIN
+FLAG=-D SRC_MAIN -g
+CPP11=-pthread --std=c++11
 
 #$@:
 #	g++ $@.cpp $(FLAG) -o $@.out
@@ -21,6 +22,12 @@ test-type-1:
 
 smart-pointer:
 	g++ $@-test.cpp $(FLAG) -o $@.out
+
+thread-pool:
+	g++ $@-test.cpp $(FLAG) $(CPP11) -o $@.out
+
+lockfree-queue:
+	g++ $@-test.cpp $(FLAG) $(CPP11) -o $@.out
 
 clean:
 	rm *.out

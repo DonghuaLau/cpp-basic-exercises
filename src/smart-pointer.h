@@ -5,41 +5,47 @@
 
 #include <iostream>
 
-template <typename T>
-class ECSmartPointer;
+namespace ec{
 
 template <typename T>
-class ECPointerHelper
+class SmartPointer;
+
+template <typename T>
+class PointerHelper
 {
 private:
-	friend class ECSmartPointer<T>;
+	int _count;
+	T *_p;
 
-	ECPointerHelper(T *pointer) : _p(pointer), _count(1) { }
+private:
+	friend class SmartPointer<T>;
 
-	~ECPointerHelper()
+	PointerHelper(T *pointer) : _p(pointer), _count(1) { }
+
+	~PointerHelper()
 	{
 		delete _p;
 		_p = NULL;
 		//std::cout << "delete object" << std::endl;
 	}
-
-	int _count;
-	T *_p;
 };
 
 template <typename T>
-class ECSmartPointer
+class SmartPointer
 {
+private:
+	PointerHelper<T> *_helper;
+
 public:
 
-	ECSmartPointer(T *pointer) : _helper(new ECPointerHelper<T>(pointer)) { }
+	SmartPointer(T *pointer) : _helper(new PointerHelper<T>(pointer)) { }
 
-	ECSmartPointer(const ECSmartPointer<T> &smart_pointer) : _helper(smart_pointer._helper) // 构造函数不是会把_count设置为1吗？
+	SmartPointer(const SmartPointer<T> &smart_pointer) : _helper(smart_pointer._helper) // 构造函数不是会把_count设置为1吗？
 	{
 		++ _helper->_count;
 	}
 
-	ECSmartPointer & operator=(const ECSmartPointer<T> & smart_pointer)
+	SmartPointer & operator=(const SmartPointer<T> & smart_pointer)
 	{
 		++ smart_pointer->_count;
 		if(-- _helper->_count == 0)
@@ -63,7 +69,7 @@ public:
 		return _helper->_p;
 	}
 
-	~ECSmartPointer()
+	~SmartPointer()
 	{
 		if(--_helper->_count == 0)
 		{
@@ -76,10 +82,9 @@ public:
 			//std::cout << "remain " << _helper->_count << " pointer(s) of object" << std::endl;
 		}
 	}
-
-private:
-	ECPointerHelper<T> *_helper;
 };
+
+} // end namespace ec
 
 #endif
 
