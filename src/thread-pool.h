@@ -7,6 +7,7 @@
 #include <vector>
 #include <thread>
 #include <mutex>
+#include <atomic>
 #include <condition_variable>
 #include <chrono>
 
@@ -35,7 +36,7 @@ protected:
 
 	std::thread::id _thread_id;
  
-	int _status;
+	std::atomic<int> _status;
 	bool _one_time_running;
 	
 	void *_param;
@@ -74,7 +75,7 @@ public:
 
 		//std::cout << "[" << __func__ << "] thread id: " << _thread_id << ", status: " << _status << std::endl;
 		
-		if(_status != _EC_THREAD_IDLE)
+		if(_status.load() != _EC_THREAD_IDLE)
 		{
 			//std::cout << "[" << __func__ << "] thread id: " << _thread_id << ", not idle" << std::endl;
 			return false;
@@ -90,7 +91,7 @@ public:
 
 	bool is_ready()
 	{
-		if(_status != _EC_THREAD_INIT)
+		if(_status.load() != _EC_THREAD_INIT)
 			return true;
 		else 
 			return false;
@@ -147,12 +148,12 @@ protected:
 private:
 	void set_status(int status)
 	{
-		_status = status;
+		_status.store(status);
 	}
 
 	int get_status()
 	{
-		return _status;
+		return _status.load();
 	}
 
 };
