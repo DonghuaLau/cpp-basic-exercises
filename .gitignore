@@ -9,3 +9,4 @@ trash
 *.bak
 *_test
 tags
+*.tar.gz

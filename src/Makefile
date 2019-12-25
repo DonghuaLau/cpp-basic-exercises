@@ -29,6 +29,12 @@ thread-pool:
 lockfree-queue:
 	g++ $@-test.cpp $(FLAG) $(CPP11) -o $@.out
 
+string:
+	g++ $@.cpp $(FLAG) $(CPP11) -o $@.out
+
+cpp11:
+	g++ $@.cpp --std=c++11 -o $@
+
 clean:
 	rm *.out
 
